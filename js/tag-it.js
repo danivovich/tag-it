@@ -73,6 +73,16 @@
             onTagAdded  : null,
             onTagRemoved: null,
             onTagClicked: null,
+
+            // If provided, this function will be called on the input 
+            // when the input field receives the blur event
+            // The function provided should take a single param for the value
+            // of the input field, and should return an array of strings
+            // to turn into tags
+            //
+            // If customTagTokenizer is not provided, allowSpaces will be honored
+            // on blur, and tags will be split by comma, new line, 
+            // carriage return, and tab, and also by spaces if allowSpaces is false
             customTagTokenizer: null 
         },
         
@@ -81,9 +91,9 @@
             return that.options.customTagTokenizer(input);
           } else {
             if (that.options.allowSpaces) {
-              return [input];
+              return input.split(/[,\n\r\t]/);
             } else {
-              return input.split(' ');
+              return input.split(/[ ,\n\r\t]/);
             }
           }
         },
