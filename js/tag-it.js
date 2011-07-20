@@ -72,9 +72,21 @@
             // Event callbacks.
             onTagAdded  : null,
             onTagRemoved: null,
-            onTagClicked: null
+            onTagClicked: null,
+            customTagTokenizer: null 
         },
-
+        
+        tokenizeTag: function(input) {
+          if(that.options.customTagTokenizer) {
+            return that.options.customTagTokenizer(input);
+          } else {
+            if (that.options.allowSpaces) {
+              return [input];
+            } else {
+              return input.split(' ');
+            }
+          }
+        },
 
         _create: function() {
             // for handling static scoping inside callbacks
@@ -197,7 +209,11 @@
                     }
                 }).blur(function(e){
                     // Create a tag when the element loses focus (unless it's empty).
-                    that.createTag(that._cleanedInput());
+                    var i = 0;
+                    var tags = that.tokenizeTag(that._cleanedInput());
+                    for(i=0; i < tags.length; i++) {
+                      that.createTag(tags[i]);
+                    }
                 });
                 
 
